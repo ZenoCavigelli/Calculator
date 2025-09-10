@@ -1,0 +1,407 @@
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+public class Taschenrechner {
+
+    private static char     operator              = '?';
+    private static boolean  hasOperatorBeenChosen = false;
+    private static String   input1                = "";
+    private static String   input2                = "";
+    private static GridData data                  = new GridData();
+    private static String   speicher              = null;
+    private static Float    zwüErgebniss          = null;
+    private static String   solution              = null;
+    private static String   tastaturInput         = "";
+    
+    public static Button createButton(Shell anzeige, String nummer) {
+        Button button = new Button(anzeige, SWT.PUSH);
+        button.setText(nummer);
+        GridData data = new GridData();
+        data.horizontalAlignment = GridData.FILL;
+        data.verticalAlignment = GridData.FILL;
+        button.setLayoutData(data);
+        return button;
+    }
+
+    public static Button createButtonGrab(Shell anzeige, String nummer) {
+        Button button = new Button(anzeige, SWT.PUSH);
+        button.setText(nummer);
+        GridData data = new GridData();
+        data.horizontalAlignment = GridData.FILL;
+        data.verticalAlignment = GridData.FILL;
+        data.grabExcessHorizontalSpace = true;
+        data.grabExcessVerticalSpace = true;
+        button.setLayoutData(data);
+        return button;
+    }
+
+    public static void handleUserNumberInput(String number, Text display) {
+        System.out.println(number);
+
+        if (hasOperatorBeenChosen == false) {
+            if (input1 == null) {
+                input1 = number;
+                display.setText(input1);
+            } else {
+                input1 += number;
+                display.setText(input1);
+            }
+        } else {
+            if (input2 == null) {
+                input2 = number;
+                display.setText(input1 + operator + input2);
+            } else {
+                input2 += number;
+                display.setText(input1 + operator + input2);
+            }
+        }
+    }
+
+    public static void rechnungen(char operator, String input1, String input2, Text text0) {
+        Float zahl1 = Float.parseFloat(input1);
+        Float zahl2 = Float.parseFloat(input2);
+        tastaturInput = "";
+        hasOperatorBeenChosen = false;
+        switch (operator) {
+            case '+':
+                text0.setText(zahl1 + " + " + zahl2 + " = " + (zahl1 + zahl2));
+                zwüErgebniss = zahl1 + zahl2;
+                break;
+            case '-':
+                text0.setText(zahl1 + " - " + zahl2 + " = " + (zahl1 - zahl2));
+                zwüErgebniss = zahl1 - zahl2;
+
+                break;
+            case '*':
+                text0.setText(zahl1 + " * " + zahl2 + " = " + (zahl1 * zahl2));
+                zwüErgebniss = zahl1 * zahl2;
+
+                break;
+            case '/':
+                text0.setText(zahl1 + " / " + zahl2 + " = " + (zahl1 / zahl2));
+                zwüErgebniss = zahl1 / zahl2;
+
+                break;
+            default:
+                System.out.println("Eingabe Ungültig");
+        }
+    
+    }
+
+    public static void main(String[] args) {
+        
+            Display anzeige = new Display();
+            Shell shell = new Shell(anzeige);
+            GridLayout gridLayout = new GridLayout();
+            gridLayout.numColumns = 4;
+            gridLayout.makeColumnsEqualWidth = true;
+            shell.setLayout(gridLayout);
+
+            Text display = new Text(shell, SWT.BORDER);
+            display.setText("");
+            GridData data = new GridData();
+            data.horizontalAlignment = GridData.FILL;
+            data.verticalAlignment = GridData.FILL;
+            data.horizontalSpan = 4;
+            data.verticalSpan = 2;
+            data.grabExcessHorizontalSpace = true;
+            data.grabExcessVerticalSpace = true;
+            display.setLayoutData(data);
+              
+            display.getText();
+
+            Button button1 = createButtonGrab(shell, "1");
+
+            Button button2 = createButton(shell, "2");
+
+            Button button3 = createButton(shell, "3");
+
+            Button durch = createButtonGrab(shell, "/");
+
+            Button button4 = createButtonGrab(shell, "4");
+
+            Button button5 = createButton(shell, "5");
+
+            Button button6 = createButton(shell, "6");
+
+            Button mal = createButtonGrab(shell, "x");
+
+            Button button7 = createButtonGrab(shell, "7");
+
+            Button button8 = createButton(shell, "8");
+
+            Button button9 = createButton(shell, "9");
+
+            Button minus = createButtonGrab(shell, "-");
+
+            Button button0 = createButton(shell, "0");
+
+            Button punkt = createButton(shell, ".");
+
+            Button gleich = createButtonGrab(shell, "=");
+
+            Button plus = createButtonGrab(shell, "+");
+
+            Button delete = createButtonGrab(shell, "Del");
+
+            Button copy = createButtonGrab(shell, "copy");
+
+            Button copySolution = createButtonGrab(shell, "copy solution");
+
+            Button paste = createButtonGrab(shell, "paste");
+
+          do {
+            display.addModifyListener(e -> {
+                tastaturInput = display.getText();
+            if (hasOperatorBeenChosen == false) {
+                String input1 = tastaturInput;
+                System.out.println(input1);
+            }  if (hasOperatorBeenChosen) {
+                String input2 = tastaturInput;
+                System.out.println(input2);
+            }
+            System.out.println(tastaturInput);
+
+            String tastaturInput = display.getText();
+            if (tastaturInput.contains("+")) {
+                System.out.println(" + ");
+                operator = '+';
+                hasOperatorBeenChosen = true;
+            }
+            if (tastaturInput.contains("-")) {
+                System.out.println(" - ");
+                operator = '-';
+                hasOperatorBeenChosen = true;
+            }
+            if (tastaturInput.contains("*")) {
+                System.out.println(" *  ");
+                operator = '*';
+                hasOperatorBeenChosen = true;
+            }
+            if (tastaturInput.contains("/")) {
+                System.out.println(" / ");
+                operator = '/';
+                hasOperatorBeenChosen = true;
+            }
+            if (tastaturInput.contains("=") || tastaturInput.contains("/r")) {
+                rechnungen(operator, input1, input2, display);
+                input1 = null;
+                input2 = null;
+                operator = '?';
+                hasOperatorBeenChosen = false;
+                
+            }
+            });
+          } while (!tastaturInput.contains("="));
+            
+            button1.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("1", display);
+                }
+            });
+
+            button2.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("2", display);
+                }
+            });
+
+            button3.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("3", display);
+                }
+            });
+            durch.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (input1 != null && hasOperatorBeenChosen == false) {
+                        tastaturInput = "";
+                        System.out.println(" / ");
+                        operator = '/';
+                        hasOperatorBeenChosen = true;
+                        display.setText(input1 + operator);
+                    }
+                }
+            });
+
+            button4.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("4", display);
+                }
+            });
+
+            button5.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("5", display);
+                }
+            });
+
+            button6.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("6", display);
+                }
+            });
+
+            mal.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (input1 != null && hasOperatorBeenChosen == false) {
+                        tastaturInput = "";
+                        System.out.println(" *  ");
+                        operator = '*';
+                        hasOperatorBeenChosen = true;
+                        display.setText(input1 + operator);
+                    }
+                }
+            });
+
+            button7.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("7", display);
+                }
+            });
+
+            button8.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("8", display);
+                }
+            });
+
+            button9.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("9", display);
+                }
+            });
+
+            minus.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (input1 != null && hasOperatorBeenChosen == false) {
+                        tastaturInput = "";
+                        System.out.println(" - ");
+                        operator = '-';
+                        hasOperatorBeenChosen = true;
+                        display.setText(input1 + operator);
+                    }
+                }
+            });
+
+            button0.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput("0", display);
+                }
+            });
+
+            plus.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (input1 != null && hasOperatorBeenChosen == false) {
+                        tastaturInput = "";
+                        System.out.println(" + ");
+                        operator = '+';
+                        hasOperatorBeenChosen = true;
+                        display.setText(input1 + operator);
+                    }
+                }
+            });
+
+            punkt.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    handleUserNumberInput(".", display);
+                }
+            });
+
+            gleich.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (input2 != null) {
+                        tastaturInput = "";
+
+                        if (!hasOperatorBeenChosen) {
+                            zwüErgebniss = null;
+                            solution = null;
+                        }
+
+                        System.out.println("=");
+                        rechnungen(operator, input1, input2, display);
+
+                        input1 = null;
+                        input2 = null;
+                        operator = '?';
+                        hasOperatorBeenChosen = false;
+
+                    }
+                }
+            });
+
+            delete.addSelectionListener(new SelectionAdapter() {
+            });
+            if (!hasOperatorBeenChosen) {
+                if (input1 != null && !input1.isEmpty()) {
+                    input1 = input1.substring(0, input1.length() - 1);
+                    display.setText(input1);
+                }
+            } else {
+                if (input2 != null && !input2.isEmpty()) {
+                    input2 = input2.substring(0, input2.length() - 1);
+                    display.setText(input1 + operator + input2);
+                }
+            }
+
+            copy.addSelectionListener(new SelectionAdapter() {
+            });
+            if (!hasOperatorBeenChosen && input1 != null) {
+                speicher = input1;
+            } else if (hasOperatorBeenChosen && input2 != null) {
+                speicher = input2;
+            }
+
+            copySolution.addSelectionListener(new SelectionAdapter() {
+            });
+            if (zwüErgebniss != null) {
+                solution = Float.toString(zwüErgebniss);
+                speicher = solution;
+            }
+
+            paste.addSelectionListener(new SelectionAdapter() {
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    if (speicher != null) {
+                        handleUserNumberInput(speicher, display);
+                    }
+                }
+            });
+
+            shell.pack();
+            shell.open();
+
+            while (!shell.isDisposed()) {
+                if (!anzeige.readAndDispatch()) {
+                    anzeige.sleep();
+                }
+            }
+
+            anzeige.dispose();
+
+        }
+    
+}
