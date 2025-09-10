@@ -17,7 +17,7 @@ public class Taschenrechner {
     private static String   input2                = "";
     private static GridData data                  = new GridData();
     private static String   speicher              = null;
-    private static Float    zwüErgebniss          = null;
+    private static Float    zwueErgebniss          = null;
     private static String   solution              = null;
     private static String   tastaturInput         = "";
     
@@ -46,7 +46,7 @@ public class Taschenrechner {
     public static void handleUserNumberInput(String number, Text display) {
         System.out.println(number);
 
-        if (hasOperatorBeenChosen == false) {
+        if (!hasOperatorBeenChosen) {
             if (input1 == null) {
                 input1 = number;
                 display.setText(input1);
@@ -73,25 +73,25 @@ public class Taschenrechner {
         switch (operator) {
             case '+':
                 text0.setText(zahl1 + " + " + zahl2 + " = " + (zahl1 + zahl2));
-                zwüErgebniss = zahl1 + zahl2;
+                zwueErgebniss = zahl1 + zahl2;
                 break;
             case '-':
                 text0.setText(zahl1 + " - " + zahl2 + " = " + (zahl1 - zahl2));
-                zwüErgebniss = zahl1 - zahl2;
+                zwueErgebniss = zahl1 - zahl2;
 
                 break;
             case '*':
                 text0.setText(zahl1 + " * " + zahl2 + " = " + (zahl1 * zahl2));
-                zwüErgebniss = zahl1 * zahl2;
+                zwueErgebniss = zahl1 * zahl2;
 
                 break;
             case '/':
                 text0.setText(zahl1 + " / " + zahl2 + " = " + (zahl1 / zahl2));
-                zwüErgebniss = zahl1 / zahl2;
+                zwueErgebniss = zahl1 / zahl2;
 
                 break;
             default:
-                System.out.println("Eingabe Ungültig");
+                System.out.println("Eingabe Ungültig: " + operator);
         }
     
     }
@@ -158,49 +158,49 @@ public class Taschenrechner {
 
             Button paste = createButtonGrab(shell, "paste");
 
-          do {
+   //if (display.equals(input2) && display.equals(input1) && display.equals(operator))  {
             display.addModifyListener(e -> {
                 tastaturInput = display.getText();
-            if (hasOperatorBeenChosen == false) {
-                String input1 = tastaturInput;
-                System.out.println(input1);
+                if (tastaturInput.contains("+")) {
+                    System.out.println(" + ");
+                    operator = '+';
+                    hasOperatorBeenChosen = true;
+                }
+                if (tastaturInput.contains("-")) {
+                    System.out.println(" - ");
+                    operator = '-';
+                    hasOperatorBeenChosen = true;
+                }
+                if (tastaturInput.contains("*")) {
+                    System.out.println(" *  ");
+                    operator = '*';
+                    hasOperatorBeenChosen = true;
+                }
+                if (tastaturInput.contains("/")) {
+                    System.out.println(" / ");
+                    operator = '/';
+                    hasOperatorBeenChosen = true;
+                }
+            if (!hasOperatorBeenChosen) {
+                input1 = tastaturInput;
+                System.out.println("xxx: "+ input1);
             }  if (hasOperatorBeenChosen) {
-                String input2 = tastaturInput;
-                System.out.println(input2);
+                input2 = tastaturInput;
+                System.out.println("yyy" + input2);
             }
             System.out.println(tastaturInput);
 
             String tastaturInput = display.getText();
-            if (tastaturInput.contains("+")) {
-                System.out.println(" + ");
-                operator = '+';
-                hasOperatorBeenChosen = true;
-            }
-            if (tastaturInput.contains("-")) {
-                System.out.println(" - ");
-                operator = '-';
-                hasOperatorBeenChosen = true;
-            }
-            if (tastaturInput.contains("*")) {
-                System.out.println(" *  ");
-                operator = '*';
-                hasOperatorBeenChosen = true;
-            }
-            if (tastaturInput.contains("/")) {
-                System.out.println(" / ");
-                operator = '/';
-                hasOperatorBeenChosen = true;
-            }
             if (tastaturInput.contains("=") || tastaturInput.contains("/r")) {
                 rechnungen(operator, input1, input2, display);
-                input1 = null;
-                input2 = null;
+//                input1 = null;
+//                input2 = null;
                 operator = '?';
                 hasOperatorBeenChosen = false;
                 
             }
             });
-          } while (!tastaturInput.contains("="));
+ //  }
             
             button1.addSelectionListener(new SelectionAdapter() {
                 @Override
@@ -337,7 +337,7 @@ public class Taschenrechner {
                         tastaturInput = "";
 
                         if (!hasOperatorBeenChosen) {
-                            zwüErgebniss = null;
+                            zwueErgebniss = null;
                             solution = null;
                         }
 
@@ -377,8 +377,8 @@ public class Taschenrechner {
 
             copySolution.addSelectionListener(new SelectionAdapter() {
             });
-            if (zwüErgebniss != null) {
-                solution = Float.toString(zwüErgebniss);
+            if (zwueErgebniss != null) {
+                solution = Float.toString(zwueErgebniss);
                 speicher = solution;
             }
 
@@ -405,3 +405,4 @@ public class Taschenrechner {
         }
     
 }
+
